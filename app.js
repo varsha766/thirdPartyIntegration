@@ -52,6 +52,9 @@ app.get('/home', (req, res) => {
 app.get('/marketplace', (req, res) => {
     res.sendFile("./public/marketplace.html", { root: __dirname })
 })
+app.get('/profile', (req, res) => {
+    res.sendFile("./public/profile.html", { root: __dirname })
+})
 app.post('/', async (req, res) => {
     try {
         console.log('------------------------')
@@ -70,19 +73,27 @@ app.post('/', async (req, res) => {
 
 app.post('/event', async (req, res) => {
     try {
+        console.log('----------1')
         const url = '/api/v1/app/events'
         req.body.data['appId'] = appId
+        console.log('----------2')
+
         const payload = req.body
         const signature = await SignData(payload, privateKey)
+        console.log('----------3')
+
         payload['fyresign'] = signature.signature
         payload['datahash'] = signature.messageHash
-        console.log(payload)
+        //console.log(payload)
+        //JSON.stringify(payload)
+      //  console.log('===============')
+      //  console.log(payload)
         const externalPlatformInfo = await fetch(HYPERFYRE_BASE_URL + url, {
-            headers: {
+            headers:{
                 "Content-Type": 'application/json'
             },
             method: 'POST',
-            body: payload
+            body: JSON.stringify(payload)
         })
             .then(response => {
                 console.log(response)
