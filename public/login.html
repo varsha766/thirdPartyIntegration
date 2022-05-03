@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login with meta mask</title>
+</head>
+
+<style type="text/css"> 
+    #mydiv {
+        text-align: center;
+        position:absolute;
+        top: 50%;
+        left: 50%;
+        width:30em;
+        height:18em;
+        margin-top: -9em; /*set to a negative number 1/2 of your height*/
+        margin-left: -15em; /*set to a negative number 1/2 of your width*/
+        border: 1px solid #ccc;
+        background-color: hsl(244, 36%, 56%);
+    }
+    
+    </style>   
+    
+<body>
+    <div id="mydiv">
+    <h3>LOGIN WITH METAMASK</h3>
+    <button onclick="loadWeb3()">Click To Login </button>
+
+    </div>
+    <script type="text/javascript" src=".web3.min.js">
+        
+    </script>
+    <script>
+
+
+//         // window.location.href=`${window.location}home.html`
+//        window.location.href="/home"
+const url="http://localhost:3000/"
+async function loadWeb3()  {
+    if(window.ethereum){
+        console.log('=============')
+    var accounts= await ethereum.request({method :'eth_requestAccounts'});
+    
+    console.log(accounts)
+    if(accounts.length!==0){
+        fetch(url,{
+        headers:{
+            'Content-Type': 'application/json'
+        },
+            method:"POST",
+            body:JSON.stringify(accounts)
+        }).then(response=>{
+            console.log(response)
+            if(response){
+                console.log('*****************')
+  window.location.href= `${window.location}home`
+}
+            return response.json();
+        })
+        
+      
+    }else{
+        window.alert("Non-Ethereum browser detected");
+        return null;  
+    }
+
+}
+
+}
+    </script>
+</body>
+</html>
+

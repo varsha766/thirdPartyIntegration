@@ -1,0 +1,9 @@
+POST http://localhost:3000/info
+
+Content-Type: application/json
+
+ {
+    "appId":"626a325b57cee6197318b8d3",
+    "thirdParty_User_Id":"123456",
+    "purpose":
+ }
