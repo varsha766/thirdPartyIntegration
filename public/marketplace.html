@@ -103,7 +103,9 @@ async function show(data){
     <td>${r.fromDate}</td> 
     <td>${r.toDate}</td>   
     <td>${r.projectStatus?'Open':'Closed'}</td> 
+
     <td><a href=${'https://hyperfyre-stage.netlify.app/form/'+r.slug}><button onclick="fetchToken()" >Participate</button> </a></td>         
+
 
 </tr>`;
 
