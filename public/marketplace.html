@@ -127,6 +127,7 @@ async function fetchToken(){
     data=data
     data=data[index]
     eventId=data._id
+    slug= data.slug
     const url="http://localhost:3000/token"
     let iat = Math.floor(Date.now() / 1000);
     const exp= Math.floor((Date.now()+(3600*24*1000))/1000);
@@ -157,10 +158,30 @@ async function fetchToken(){
         const resp= await response.json()
         console.log(resp)
         if(resp){
-            console.log(resp)
+        //     const url= `http://localhost:6006/form/${slug}?token=${resp.data.userAccessToken}`
+        //    window.location.replace(url)
+             console.log(resp)
+           const url="http://localhost:3000/participate"
+           const body= {
+               slug,
+               token:resp.data.userAccessToken
+           }
+            const data= await fetch(url,{
+                headers:{
+                    "Content-Type": 'application/json'
+
+                },
+                method:"POST",
+                body:JSON.stringify(body)
+            }).then(async response=>{
+                const res= await response.json()
+                console.log(res)
+            })
         }
     })
 }
     </script>
 </body>
 </html>
+
+<!--       

@@ -79,7 +79,7 @@ app.post('/event', async (req, res) => {
 
         const payload = req.body
         const signature = await SignData(payload.data, privateKey)
-        console.log(payload);
+       // console.log(payload);
         payload['fyresign'] = signature.signature
         payload['datahash'] = signature.messageHash
 
@@ -112,7 +112,7 @@ app.post('/user/event', async (req, res) => {
         payload['fyresign'] = signature.signature
         payload['datahash'] = signature.messageHash
         
-        console.log(signature)
+       /// console.log(signature)
         const externalPlatformInfo = await fetch(HYPERFYRE_BASE_URL + url, {
             headers: {
                 "Content-Type": 'application/json'
@@ -147,6 +147,7 @@ app.post('/token', async (req, res) => {
         payload['datahash'] = signature.messageHash
         
         console.log(signature)
+        console.log(payload)
         const accessToken = await fetch(HYPERFYRE_BASE_URL + url, {
             headers: {
                 "Content-Type": 'application/json'
@@ -156,7 +157,7 @@ app.post('/token', async (req, res) => {
         })
             .then(async response => {
                 const resp = await response.json()
-                //console.log(resp)
+                console.log(resp)
                 res.send(resp)
             })
 
@@ -166,6 +167,24 @@ app.post('/token', async (req, res) => {
     }
 })
 
+app.post('/participate', async(req, res)=> {
+ try{
+    const {slug, token}= req.body
+    const url= `/form/${slug}?token=${token}`
+    const result= await fetch(HYPERFYRE_BASE_URL + url, {
+        method:'GET'
+    }).then(async response=>{
+        const resp= await response.json()
+        console.log(resp)
+        res.send(resp)
+    })
+
+
+}catch(e){
+
+}
+
+})
 server.listen(port, () => {
     console.log('server is running on  port', port);
 })
