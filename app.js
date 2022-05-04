@@ -78,13 +78,13 @@ app.post('/event', async (req, res) => {
         req.body.data['appId'] = appId
 
         const payload = req.body
-        const signature = await SignData(payload, privateKey)
-
+        const signature = await SignData(payload.data, privateKey)
+        console.log(payload);
         payload['fyresign'] = signature.signature
         payload['datahash'] = signature.messageHash
 
         //  console.log('===============')
-        // console.log(payload)
+         
         const externalPlatformInfo = await fetch(HYPERFYRE_BASE_URL + url, {
             headers: {
                 "Content-Type": 'application/json'
@@ -108,11 +108,11 @@ app.post('/user/event', async (req, res) => {
         const url = '/api/v1/app/user/events'
         req.body.data['appId'] = appId
         const payload = req.body
-        const signature = await SignData(payload, privateKey)
+        const signature = await SignData(payload.data, privateKey)
         payload['fyresign'] = signature.signature
         payload['datahash'] = signature.messageHash
-        console.log(payload)
-
+        
+        console.log(signature)
         const externalPlatformInfo = await fetch(HYPERFYRE_BASE_URL + url, {
             headers: {
                 "Content-Type": 'application/json'

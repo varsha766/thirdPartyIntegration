@@ -6,10 +6,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Market Place</title>
 </head>
+<style>
+    #customers {
+       
+        text-align: center;
+        
+      font-family: Arial, Helvetica, sans-serif;
+      border-collapse: collapse;
+      width: 75vw;
+    }
+    
+    #customers td, #customers th {
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+    
+    #customers tr:nth-child(even){background-color: #f2f2f2;}
+    
+    #customers tr:hover {background-color: #ddd;}
+    
+    #customers th {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      text-align: left;
+      background-color: #f3c44e;
+      color: rgb(0, 0, 0);
+    }
+    button{
+  background-color: white;
+  color: black;
+  border: 2px solid #000000;
+  border-radius: 50px; /* Green */
+}
+    </style>
 <body onload="fetchEventList()">
+    <a href="http://"></a>
     <h2> Welcome to Event Page</h2>
-    <p id="response"> response</p>
-    <table id="employees"></table>
+    <!-- <textarea id="response"> response</textarea> -->
+    <table id="customers" ></table>
     <!--<div onload="fetchEventList()">Trending Events</div> -->
     <script >
         const url="http://localhost:3000/event"
@@ -38,14 +72,18 @@ async function fetchEventList(){
             const resp= await response.json()
             console.log(resp)
             if(resp){
-                $("#response").html(resp)
-              console.log(resp)
-              show(resp)
+               // document.getElementById("response").innerHTML=JSON.stringify(resp)
+                localStorage.clear()
+                localStorage.setItem('data',JSON.stringify(resp))
+              //  $("#response").html(resp)
+     
+              show(resp.data)
             }
         })
     }
 
-async function show(response){
+async function show(data){
+   console.log(data);
     let tab = 
         `<tr>
           <th>Event Id</th>
@@ -53,22 +91,26 @@ async function show(response){
           <th>Start Date</th>
           <th>End Date</th>
           <th> ProjectStatus</th>
+          <th> Participate</th>
          
          </tr>`;
     
     // Loop to access all rows 
-    for (let r of data.list) {
+    for (let r of data.appEventList) {
         tab += `<tr> 
     <td>${r._id} </td>
     <td>${r.projectName}</td>
     <td>${r.fromDate}</td> 
     <td>${r.toDate}</td>   
-    <td>${r.projectStatus}</td>          
+    <td>${r.projectStatus?'Open':'Closed'}</td> 
+    <td> <a href=${'https://hyperfyre-stage.netlify.app/form/'+r.slug}><button >Participate</button></a></td>         
 
 </tr>`;
+
+
     }
     // Setting innerHTML as tab variable
-    document.getElementById("employees").innerHTML = tab;
+    document.getElementById("customers").innerHTML = tab;
 } 
 
     </script>
