@@ -103,7 +103,9 @@ async function show(data){
     <td>${r.fromDate}</td> 
     <td>${r.toDate}</td>   
     <td>${r.projectStatus?'Open':'Closed'}</td> 
-    <td> <a href=${'https://hyperfyre-stage.netlify.app/form/'+r.slug}><button >Participate</button></a></td>         
+
+    <td><a href=${'https://hyperfyre-stage.netlify.app/form/'+r.slug}><button onclick="fetchToken()" >Participate</button> </a></td>         
+
 
 </tr>`;
 
@@ -113,6 +115,35 @@ async function show(data){
     document.getElementById("customers").innerHTML = tab;
 } 
 
+async function fetchToken(){
+    const url="http://localhost:3000/token"
+    let iat = Math.floor(Date.now() / 1000);
+    const exp= Math.floor((Date.now()+(3600*24*1000))/1000);
+    const isEmail= false;
+    //const eventId= $(this).closest('tr').find('.table_id').text()//r._id
+    const eventId= r._id
+    console.log("==================="+eventId)
+    externalUserId= "0x54ceff083c2c71b8e23b7a98bac91cf65883e880"
+    const body={
+        data:{
+            iat,
+            exp,
+            isEmail,
+            externalUserId,
+            eventId
+        }
+    }
+    const token= await fetch(url,{
+       method:"GET",
+       body:JSON.strigify(body)
+    }).then(async response=>{
+        const resp= await response.json()
+        console.log(resp)
+        if(resp){
+            console.log(resp)
+        }
+    })
+}
     </script>
 </body>
 </html>

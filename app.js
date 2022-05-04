@@ -132,6 +132,37 @@ app.post('/user/event', async (req, res) => {
     }
 })
 
+app.post('/token', async (req, res) => {
+    try {
+        //eventId need to add
+        const url = '/api/v1/app/user/redirection'
+        req.body.data['appId'] = appId
+        const payload = req.body
+        console.log(req.body)
+        const signature = await SignData(payload.data, privateKey)
+        payload['fyresign'] = signature.signature
+        payload['datahash'] = signature.messageHash
+        
+        console.log(signature)
+        const accessToken = await fetch(HYPERFYRE_BASE_URL + url, {
+            headers: {
+                "Content-Type": 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify(payload)
+        })
+            .then(async response => {
+                const resp = await response.json()
+                //console.log(resp)
+                res.send(resp)
+            })
+
+    } catch (e) {
+        console.log(`Error: ${e}`);
+        res.send(e)
+    }
+})
+
 server.listen(port, () => {
     console.log('server is running on  port', port);
 })
