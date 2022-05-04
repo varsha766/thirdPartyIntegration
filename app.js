@@ -136,9 +136,12 @@ app.post('/token', async (req, res) => {
     try {
         //eventId need to add
         const url = '/api/v1/app/user/redirection'
+        
         req.body.data['appId'] = appId
+        
         const payload = req.body
-        console.log(req.body)
+     //   payload.data['appId']=app
+    
         const signature = await SignData(payload.data, privateKey)
         payload['fyresign'] = signature.signature
         payload['datahash'] = signature.messageHash
