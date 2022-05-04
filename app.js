@@ -78,13 +78,13 @@ app.post('/event', async (req, res) => {
         req.body.data['appId'] = appId
 
         const payload = req.body
-        const signature = await SignData(payload, privateKey)
-
+        const signature = await SignData(payload.data, privateKey)
+        console.log(payload);
         payload['fyresign'] = signature.signature
         payload['datahash'] = signature.messageHash
 
         //  console.log('===============')
-        // console.log(payload)
+         
         const externalPlatformInfo = await fetch(HYPERFYRE_BASE_URL + url, {
             headers: {
                 "Content-Type": 'application/json'
@@ -108,12 +108,43 @@ app.post('/user/event', async (req, res) => {
         const url = '/api/v1/app/user/events'
         req.body.data['appId'] = appId
         const payload = req.body
-        const signature = await SignData(payload, privateKey)
+        const signature = await SignData(payload.data, privateKey)
         payload['fyresign'] = signature.signature
         payload['datahash'] = signature.messageHash
-        console.log(payload)
-
+        
+        console.log(signature)
         const externalPlatformInfo = await fetch(HYPERFYRE_BASE_URL + url, {
+            headers: {
+                "Content-Type": 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify(payload)
+        })
+            .then(async response => {
+                const resp = await response.json()
+                //console.log(resp)
+                res.send(resp)
+            })
+
+    } catch (e) {
+        console.log(`Error: ${e}`);
+        res.send(e)
+    }
+})
+
+app.post('/token', async (req, res) => {
+    try {
+        //eventId need to add
+        const url = '/api/v1/app/user/redirection'
+        req.body.data['appId'] = appId
+        const payload = req.body
+        console.log(req.body)
+        const signature = await SignData(payload.data, privateKey)
+        payload['fyresign'] = signature.signature
+        payload['datahash'] = signature.messageHash
+        
+        console.log(signature)
+        const accessToken = await fetch(HYPERFYRE_BASE_URL + url, {
             headers: {
                 "Content-Type": 'application/json'
             },
