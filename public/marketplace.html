@@ -8,15 +8,14 @@
 </head>
 <body onload="fetchEventList()">
     <h2> Welcome to Event Page</h2>
+    <p id="response"> response</p>
+    <table id="employees"></table>
     <!--<div onload="fetchEventList()">Trending Events</div> -->
     <script >
         const url="http://localhost:3000/event"
 async function fetchEventList(){
-    console.log('===============')
     let iat = Math.floor(Date.now() / 1000);
     const exp= Math.floor((Date.now()+(3600*24*1000))/1000);
-    console.log('iat  '+ iat)
-    console.log(exp)
     const metaData={
         limit:10,
         page:1
@@ -25,10 +24,7 @@ async function fetchEventList(){
         data:{
             iat,
             exp,
-            metaData:{
-                "page": 1,
-                "limit":10,
-            }
+            metaData
         }
     }
     const eventList= await fetch(url,{
@@ -38,16 +34,43 @@ async function fetchEventList(){
         method:"POST",
         body:JSON.stringify(body)
 
-        }).then(response=>{
-            console.log(response)
-            if(response){
-              console.log(response)
+        }).then(async response=>{
+            const resp= await response.json()
+            console.log(resp)
+            if(resp){
+                $("#response").html(resp)
+              console.log(resp)
+              show(resp)
             }
         })
     }
 
+async function show(response){
+    let tab = 
+        `<tr>
+          <th>Event Id</th>
+          <th>Event Name</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th> ProjectStatus</th>
+         
+         </tr>`;
+    
+    // Loop to access all rows 
+    for (let r of data.list) {
+        tab += `<tr> 
+    <td>${r._id} </td>
+    <td>${r.projectName}</td>
+    <td>${r.fromDate}</td> 
+    <td>${r.toDate}</td>   
+    <td>${r.projectStatus}</td>          
 
-       // To Do api call details
+</tr>`;
+    }
+    // Setting innerHTML as tab variable
+    document.getElementById("employees").innerHTML = tab;
+} 
+
     </script>
 </body>
 </html>

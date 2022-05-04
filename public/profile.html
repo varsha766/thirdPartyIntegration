@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Myprofile</title>
+</head>
+<body onload="fetchEventList()">
+    <h2>  My Profile</h2>
+    <!--<div onload="fetchEventList()">Trending Events</div> -->
+    <script >
+        const url="http://localhost:3000/user/event"
+async function fetchEventList(){
+    let iat = Math.floor(Date.now() / 1000);
+    const exp= Math.floor((Date.now()+(3600*24*1000))/1000);
+    const isEmail= false;
+    const externalUserId= "0x54ceff083c2c71b8e23b7a98bac91cf65883e880"
+    const metaData={
+        limit:10,
+        page:1
+    };
+    const body={
+        data:{
+            iat,
+            exp,
+            isEmail,
+            externalUserId,
+            metaData:{
+                "page": 1,
+                "limit":10,
+            }
+        }
+    }
+    const eventList= await fetch(url,{
+        headers:{
+            "Content-Type": 'application/json'
+        },
+        method:"POST",
+        body:JSON.stringify(body)
+
+        }).then(response=>{
+            console.log(response)
+            if(response){
+              console.log(response)
+            }
+        })
+    }
+
+
+    </script>
+</body>
+</html>

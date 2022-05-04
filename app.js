@@ -12,7 +12,6 @@ import UserModel from "./userDetail.js" //".userDetail"
 const __dirname = path.resolve();
 
 env.config();
-
 const app = express();
 const server = http.createServer(app);
 const dbUrl = process.env.DB_URL
@@ -36,6 +35,7 @@ app.use(express.urlencoded({ extended: true }))
 const SignData = async (Json_data, privateKey) => {
     const Web3 = new web3();
     const signedData = await Web3.eth.accounts.sign(JSON.stringify(Json_data), privateKey)
+    // console.log(signedData)
     return signedData
 }
 
@@ -57,47 +57,73 @@ app.get('/profile', (req, res) => {
 })
 app.post('/', async (req, res) => {
     try {
-        console.log('------------------------')
-        console.log(req.body)
-        const userDetail = await UserModel.create({
-            publicKey: req.body
-        })
-        console.log(userDetail)
+        let userDetail;
+        userDetail = await UserModel.findOne({ publicKey: req.body })
+        if (!userDetail) {
+            userDetail = await UserModel.create({
+                publicKey: req.body
+            })
+        }
+        externalUserId = userDetail.publicKey;
+        console.log(externalUserId)
         res.json(userDetail)
     } catch (e) {
-        console.log(e)
         res.send(e)
     }
 })
 
-
 app.post('/event', async (req, res) => {
     try {
-        console.log('----------1')
         const url = '/api/v1/app/events'
         req.body.data['appId'] = appId
-        console.log('----------2')
 
         const payload = req.body
         const signature = await SignData(payload, privateKey)
-        console.log('----------3')
 
         payload['fyresign'] = signature.signature
         payload['datahash'] = signature.messageHash
-        //console.log(payload)
-        //JSON.stringify(payload)
-      //  console.log('===============')
-      //  console.log(payload)
+
+        //  console.log('===============')
+        // console.log(payload)
         const externalPlatformInfo = await fetch(HYPERFYRE_BASE_URL + url, {
-            headers:{
+            headers: {
                 "Content-Type": 'application/json'
             },
             method: 'POST',
             body: JSON.stringify(payload)
         })
-            .then(response => {
-                console.log(response)
-                res.send(response)
+            .then(async response => {
+                const resp = await response.json()
+                //console.log(resp)
+                res.send(resp)
+            })
+
+    } catch (e) {
+        console.log(`Error: ${e}`);
+        res.send(e)
+    }
+})
+app.post('/user/event', async (req, res) => {
+    try {
+        const url = '/api/v1/app/user/events'
+        req.body.data['appId'] = appId
+        const payload = req.body
+        const signature = await SignData(payload, privateKey)
+        payload['fyresign'] = signature.signature
+        payload['datahash'] = signature.messageHash
+        console.log(payload)
+
+        const externalPlatformInfo = await fetch(HYPERFYRE_BASE_URL + url, {
+            headers: {
+                "Content-Type": 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify(payload)
+        })
+            .then(async response => {
+                const resp = await response.json()
+                //console.log(resp)
+                res.send(resp)
             })
 
     } catch (e) {
