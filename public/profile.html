@@ -6,8 +6,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Myprofile</title>
 </head>
+
+<style>
+       #customers {
+       
+       text-align: center;
+       
+     font-family: Arial, Helvetica, sans-serif;
+     border-collapse: collapse;
+     width: 75vw;
+   }
+   
+   #customers td, #customers th {
+     border: 1px solid #ddd;
+     padding: 8px;
+   }
+   
+   #customers tr:nth-child(even){background-color: #f2f2f2;}
+   
+   #customers tr:hover {background-color: #ddd;}
+   
+   #customers th {
+     padding-top: 12px;
+     padding-bottom: 12px;
+     text-align: left;
+     background-color: #f3c44e;
+     color: rgb(0, 0, 0);
+   }
+</style>
+
 <body onload="fetchEventList()">
     <h2>  My Profile</h2>
+    <table id="customers" ></table>
+
     <!--<div onload="fetchEventList()">Trending Events</div> -->
     <script >
         const url="http://localhost:3000/user/event"
@@ -15,7 +46,10 @@ async function fetchEventList(){
     let iat = Math.floor(Date.now() / 1000);
     const exp= Math.floor((Date.now()+(3600*24*1000))/1000);
     const isEmail= false;
-    const externalUserId= "0x54ceff083c2c71b8e23b7a98bac91cf65883e880"
+    await ethereum.request({method :'eth_requestAccounts'});
+    const externalUserId=window.ethereum.selectedAddress
+
+    console.log(externalUserId);
     const metaData={
         limit:10,
         page:1
@@ -39,14 +73,52 @@ async function fetchEventList(){
         method:"POST",
         body:JSON.stringify(body)
 
-        }).then(response=>{
-            console.log(response)
-            if(response){
-              console.log(response)
-            }
+        }).then( async response=>{
+            const resp =  await response.json()
+                console.log(resp)
+                show(resp.data)
         })
     }
 
+
+
+    async function show(data){
+   console.log(data);
+    let tab = 
+        `<tr>
+          <th>Event Id</th>
+          <th>Event Name</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th> ProjectStatus</th>
+        
+         
+         </tr>`;
+    
+    // Loop to access all rows 
+    let i=0;
+  
+    for (let r of data.userEvent) {
+
+        tab += `<tr> 
+    <td>${r._id} </td>
+    <td>${r.projectName}</td>
+    <td>${r.fromDate}</td> 
+    <td>${r.toDate}</td>   
+    <td>${r.projectStatus?'Open':'Closed'}</td> 
+
+        
+    
+
+</tr>`;
+
+document.getElementById("customers").innerHTML = tab;
+
+    }
+    // Setting innerHTML as tab variable
+   
+ 
+} 
 
     </script>
 </body>

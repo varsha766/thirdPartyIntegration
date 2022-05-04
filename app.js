@@ -122,13 +122,13 @@ app.post('/user/event', async (req, res) => {
         })
             .then(async response => {
                 const resp = await response.json()
-                //console.log(resp)
+                console.log(resp)
                 res.send(resp)
             })
 
     } catch (e) {
         console.log(`Error: ${e}`);
-        res.send(e)
+        res.send(e.messsage)
     }
 })
 
