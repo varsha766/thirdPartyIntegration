@@ -37,6 +37,7 @@
 
 <body onload="fetchEventList()">
     <h2>  My Profile</h2>
+    <div><p id="walletAdr"></p></div>
     <table id="customers" ></table>
 
     <!--<div onload="fetchEventList()">Trending Events</div> -->
@@ -48,6 +49,7 @@ async function fetchEventList(){
     const isEmail= false;
     await ethereum.request({method :'eth_requestAccounts'});
     const externalUserId=window.ethereum.selectedAddress
+    document.getElementById('walletAdr').innerText =externalUserId
 
     console.log(externalUserId);
     const metaData={

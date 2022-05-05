@@ -97,7 +97,7 @@ async function show(data){
     
     // Loop to access all rows 
     let i=0;
-    for (let r of data.appEventList) {
+    for (let r of data.tempAppEventList) {
 
         tab += `<tr> 
     <td>${r._id} </td>
@@ -123,7 +123,7 @@ async function fetchToken(){
     // fetchToken(r._id,r.slug)
     index=event.srcElement.id.split("_")[1]
     let data=localStorage.getItem('data')
-    data=JSON.parse(data).data.appEventList
+    data=JSON.parse(data).data.tempAppEventList
     data=data
     data=data[index]
     eventId=data._id
