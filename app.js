@@ -16,7 +16,7 @@ const app = express();
 const server = http.createServer(app);
 const dbUrl = process.env.DB_URL
 const privateKey = process.env.PRIVATEKEY
-const HYPERFYRE_BASE_URL = 'http://localhost:6006'
+const HYPERFYRE_BASE_URL = 'https://stage.hypermine.in/whitelist'
 const appId = process.env.APP_ID
 const port = process.env.PORT
 mongoose.connect(dbUrl)
@@ -113,6 +113,7 @@ app.post('/user/event', async (req, res) => {
         payload['datahash'] = signature.messageHash
         
        /// console.log(signature)
+       console.log(payload);
         const externalPlatformInfo = await fetch(HYPERFYRE_BASE_URL + url, {
             headers: {
                 "Content-Type": 'application/json'
@@ -186,5 +187,5 @@ app.post('/participate', async(req, res)=> {
 
 })
 server.listen(port, () => {
-    console.log('server is running on  port', port);
+    console.log('server is running on  port http://localhost:'+port);
 })

@@ -38,13 +38,42 @@
   border: 2px solid #000000;
   border-radius: 50px; /* Green */
 }
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 200px;
+  background-color: #f1f1f1;
+}
+
+li a {
+  display: block;
+  color: #000;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+li a:hover:not(.active) {
+  background-color: #555;
+  color: white;
+} 
     </style>
 <body onload="fetchEventList()">
+
+    <div id="navBar" class="sidenav" style="float: left;">
+    
+        <ul>
+            <li><a href="/marketPlace">Market Place</a></li>
+            <li><a href="/profile">My Profile</a></li>
+          </ul>
+            </div>
     <a href="http://"></a>
+    <div style="float: right;">
     <h2> Welcome to Event Page</h2>
     <!-- <textarea id="response"> response</textarea> -->
     <table id="customers" ></table>
     <!--<div onload="fetchEventList()">Trending Events</div> -->
+</div>
     <script >
         const url="http://localhost:3000/event"
 async function fetchEventList(){
@@ -97,7 +126,7 @@ async function show(data){
     
     // Loop to access all rows 
     let i=0;
-    for (let r of data.tempAppEventList) {
+    for (let r of data.appEventList) {
 
         tab += `<tr> 
     <td>${r._id} </td>
@@ -123,7 +152,7 @@ async function fetchToken(){
     // fetchToken(r._id,r.slug)
     index=event.srcElement.id.split("_")[1]
     let data=localStorage.getItem('data')
-    data=JSON.parse(data).data.tempAppEventList
+    data=JSON.parse(data).data.appEventList
     data=data
     data=data[index]
     eventId=data._id
@@ -136,6 +165,7 @@ async function fetchToken(){
   //  console.log(eventId ,   slug);
     console.log("==================="+eventId)
     externalUserId= await ethereum.selectedAddress; //"0x54ceff083c2c71b8e23b7a98bac91cf65883e880"
+    //externalUserId="pratapmridha@gmail.com"
     console.log(externalUserId);
     const body={
         data:{
@@ -159,9 +189,9 @@ async function fetchToken(){
         console.log(resp)
         if(resp){
            
-        const url= `http://localhost:9002/form/${slug}?token=${resp.data.userAccessToken}`
+        const url= `https://hyperfyre-kyc.netlify.app/form/${slug}?token=${resp.data.userAccessToken}`
         
-         window.location.replace(url)
+         window.open(url)
           
         //    const url="http://localhost:3000/participate"
         //    const body= {

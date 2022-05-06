@@ -33,14 +33,49 @@
      background-color: #f3c44e;
      color: rgb(0, 0, 0);
    }
+   ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 200px;
+  background-color: #f1f1f1;
+}
+
+li a {
+  display: block;
+  color: #000;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+li a:hover:not(.active) {
+  background-color: #555;
+  color: white;
+} 
+
+
 </style>
 
+
+
+
+
 <body onload="fetchEventList()">
+    <div id="navBar" class="sidenav" style="float: left;">
+    
+        <ul>
+            <li><a href="/marketPlace">Market Place</a></li>
+            <li><a href="/profile">My Profile</a></li>
+          </ul>
+            </div>
+            <div style="float: right;">
     <h2>  My Profile</h2>
     <div><p id="walletAdr"></p></div>
     <table id="customers" ></table>
+    </div>
 
     <!--<div onload="fetchEventList()">Trending Events</div> -->
+
     <script >
         const url="http://localhost:3000/user/event"
 async function fetchEventList(){
