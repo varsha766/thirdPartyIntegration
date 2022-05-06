@@ -35,7 +35,6 @@ app.use(express.urlencoded({ extended: true }))
 const SignData = async (Json_data, privateKey) => {
     const Web3 = new web3();
     const signedData = await Web3.eth.accounts.sign(JSON.stringify(Json_data), privateKey)
-    // console.log(signedData)
     return signedData
 }
 
@@ -79,12 +78,8 @@ app.post('/event', async (req, res) => {
 
         const payload = req.body
         const signature = await SignData(payload.data, privateKey)
-       // console.log(payload);
         payload['fyresign'] = signature.signature
-        payload['datahash'] = signature.messageHash
-
-        //  console.log('===============')
-         
+        payload['datahash'] = signature.messageHash         
         const externalPlatformInfo = await fetch(HYPERFYRE_BASE_URL + url, {
             headers: {
                 "Content-Type": 'application/json'
@@ -94,7 +89,6 @@ app.post('/event', async (req, res) => {
         })
             .then(async response => {
                 const resp = await response.json()
-                //console.log(resp)
                 res.send(resp)
             })
 
@@ -111,8 +105,6 @@ app.post('/user/event', async (req, res) => {
         const signature = await SignData(payload.data, privateKey)
         payload['fyresign'] = signature.signature
         payload['datahash'] = signature.messageHash
-        
-       /// console.log(signature)
         const externalPlatformInfo = await fetch(HYPERFYRE_BASE_URL + url, {
             headers: {
                 "Content-Type": 'application/json'
@@ -134,20 +126,12 @@ app.post('/user/event', async (req, res) => {
 
 app.post('/token', async (req, res) => {
     try {
-        //eventId need to add
-        const url = '/api/v1/app/user/redirection'
-        
+        const url = '/api/v1/app/user/redirection'    
         req.body.data['appId'] = appId
-        
-        const payload = req.body
-     //   payload.data['appId']=app
-    
+        const payload = req.body   
         const signature = await SignData(payload.data, privateKey)
         payload['fyresign'] = signature.signature
-        payload['datahash'] = signature.messageHash
-        
-        console.log(signature)
-        console.log(payload)
+        payload['datahash'] = signature.messageHash       
         const accessToken = await fetch(HYPERFYRE_BASE_URL + url, {
             headers: {
                 "Content-Type": 'application/json'
