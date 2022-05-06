@@ -42,9 +42,7 @@
 <body onload="fetchEventList()">
     <a href="http://"></a>
     <h2> Welcome to Event Page</h2>
-    <!-- <textarea id="response"> response</textarea> -->
     <table id="customers" ></table>
-    <!--<div onload="fetchEventList()">Trending Events</div> -->
     <script >
         const url="http://localhost:3000/event"
 async function fetchEventList(){
@@ -72,11 +70,8 @@ async function fetchEventList(){
             const resp= await response.json()
             console.log(resp)
             if(resp){
-               // document.getElementById("response").innerHTML=JSON.stringify(resp)
                 localStorage.clear()
-                localStorage.setItem('data',JSON.stringify(resp))
-              //  $("#response").html(resp)
-     
+                localStorage.setItem('data',JSON.stringify(resp))     
               show(resp.data)
             }
         })
@@ -97,7 +92,7 @@ async function show(data){
     
     // Loop to access all rows 
     let i=0;
-    for (let r of data.tempAppEventList) {
+    for (let r of data.appEventList) {
 
         tab += `<tr> 
     <td>${r._id} </td>
@@ -123,7 +118,7 @@ async function fetchToken(){
     // fetchToken(r._id,r.slug)
     index=event.srcElement.id.split("_")[1]
     let data=localStorage.getItem('data')
-    data=JSON.parse(data).data.tempAppEventList
+    data=JSON.parse(data).data.appEventList
     data=data
     data=data[index]
     eventId=data._id
@@ -132,10 +127,8 @@ async function fetchToken(){
     let iat = Math.floor(Date.now() / 1000);
     const exp= Math.floor((Date.now()+(3600*24*1000))/1000);
     const isEmail= false;
-    //const eventId= $(this).closest('tr').find('.table_id').text()//r._id
-  //  console.log(eventId ,   slug);
-    console.log("==================="+eventId)
-    externalUserId= await ethereum.selectedAddress; //"0x54ceff083c2c71b8e23b7a98bac91cf65883e880"
+    console.log("eventId "+eventId)
+    externalUserId= await ethereum.selectedAddress;
     console.log(externalUserId);
     const body={
         data:{
@@ -161,24 +154,9 @@ async function fetchToken(){
            
         const url= `http://localhost:9002/form/${slug}?token=${resp.data.userAccessToken}`
         
-         window.location.replace(url)
+         window.open(url)
           
-        //    const url="http://localhost:3000/participate"
-        //    const body= {
-        //        slug,
-        //        token:resp.data.userAccessToken
-        //    }
-        //     const data= await fetch(url,{
-        //         headers:{
-        //             "Content-Type": 'application/json'
-
-        //         },
-        //         method:"POST",
-        //         body:JSON.stringify(body)
-        //     }).then(async response=>{
-        //         const res= await response.json()
-        //         console.log(res)
-        //     })
+      
         }
     })
 }
@@ -186,4 +164,3 @@ async function fetchToken(){
 </body>
 </html>
 
-<!--       

@@ -40,7 +40,6 @@
     <div><p id="walletAdr"></p></div>
     <table id="customers" ></table>
 
-    <!--<div onload="fetchEventList()">Trending Events</div> -->
     <script >
         const url="http://localhost:3000/user/event"
 async function fetchEventList(){
@@ -108,6 +107,7 @@ async function fetchEventList(){
     <td>${r.fromDate}</td> 
     <td>${r.toDate}</td>   
     <td>${r.projectStatus?'Open':'Closed'}</td> 
+    
 
         
     
