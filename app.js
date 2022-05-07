@@ -72,10 +72,12 @@ app.post('/event', async (req, res) => {
         const url = '/api/v1/app/events'
         req.body.message['appId'] = appId
         const payload = req.body
+
         const signature = await SignData(payload.message, privateKey)
         payload['fyresign'] = signature.signature
         payload['datahash'] = signature.messageHash
         const externalPlatformInfo = await fetch(base_url + url, {
+       
             headers: {
                 "Content-Type": 'application/json'
             },
@@ -100,6 +102,7 @@ app.post('/user/event', async (req, res) => {
         const signature = await SignData(payload.message, privateKey)
         payload['fyresign'] = signature.signature
         payload['datahash'] = signature.messageHash
+
         console.log(payload);
         const externalPlatformInfo = await fetch(base_url + url, {
             headers: {
@@ -122,17 +125,13 @@ app.post('/user/event', async (req, res) => {
 
 app.post('/token', async (req, res) => {
     try {
-        //eventId need to add
+
         const url = '/api/v1/app/user/redirection'
         req.body.message['appId'] = appId
-
         const payload = req.body
-        //   payload.data['appId']=app
-
         const signature = await SignData(payload.message, privateKey)
         payload['fyresign'] = signature.signature
         payload['datahash'] = signature.messageHash
-
         console.log(signature)
         console.log(payload)
         const accessToken = await fetch(base_url + url, {

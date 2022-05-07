@@ -93,6 +93,7 @@
           iat,
           exp,
           metaData
+
         }
       }
       const eventList = await fetch(url, {
@@ -130,6 +131,7 @@
     let i = 0;
       for (let r of data.appEventList) {
 
+
         tab += `<tr> 
     <td>${r._id} </td>
     <td>${r.projectName}</td>
@@ -143,6 +145,7 @@
 </tr>`;
 
         document.getElementById("customers").innerHTML = tab;
+
 
       }
       // Setting innerHTML as tab variable
@@ -172,6 +175,9 @@
           isEmail,
           externalUserId,
           eventId
+
+  
+}  
         }
       }
       console.log(body);
@@ -185,11 +191,12 @@
       }).then(async response => {
         const resp = await response.json()
         console.log(resp)
-        if (resp) {
 
+        if (resp) {
           const url = `https://hyperfyre-kyc.netlify.app/form/${slug}?token=${resp.data.userAccessToken}`
           //const url=`http://localhost:9002/form/${slug}?redirectionToken=${resp.data.userAccessToken}`
           window.open(url)
+
         }
       })
     }

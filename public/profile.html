@@ -1,22 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Myprofile</title>
 </head>
-
 <style>
     #customers {
-
         text-align: center;
-
+      
         font-family: Arial, Helvetica, sans-serif;
         border-collapse: collapse;
         width: 75vw;
-    }
+       }
 
     #customers td,
     #customers th {
@@ -40,6 +37,13 @@
         color: rgb(0, 0, 0);
     }
 
+   button {
+    background-color: white;
+    color: black;
+    border: 2px solid #000000;
+    border-radius: 50px;
+    /* Green */
+  }
     ul {
         list-style-type: none;
         margin: 0;
@@ -59,8 +63,8 @@
         background-color: #555;
         color: white;
     }
-</style>
-<body onload="fetchEventList()">
+</style>      
+ <body onload="fetchEventList()">
     <div id="navBar" class="sidenav" style="float: left;">
         <ul>
             <li><a href="/marketPlace">Market Place</a></li>
@@ -136,11 +140,11 @@
     <td>${r.fromDate}</td> 
     <td>${r.toDate}</td>   
     <td>${r.projectStatus ? 'Open' : 'Closed'}</td> 
+
 </tr>`;
   document.getElementById("customers").innerHTML = tab;
             }
         }
     </script>
 </body>
-
 </html>
