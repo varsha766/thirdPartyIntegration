@@ -3,11 +3,8 @@ import fetch from "node-fetch";
 import web3 from "web3";
 import express from "express";
 import mongoose from "mongoose";
-import bip39 from "bip39";
-import HDKey from "hdkey";
 import http from "http";
 import path from 'path';
-
 import UserModel from "./userDetail.js" //".userDetail"
 const __dirname = path.resolve();
 
@@ -16,7 +13,7 @@ const app = express();
 const server = http.createServer(app);
 const dbUrl = process.env.DB_URL
 const privateKey = process.env.PRIVATEKEY
-const HYPERFYRE_BASE_URL = 'https://stage.hypermine.in/whitelist'
+const base_url = process.env.HYPERFYRE_BASE_URL
 const appId = process.env.APP_ID
 const port = process.env.PORT
 mongoose.connect(dbUrl)
@@ -35,7 +32,6 @@ app.use(express.urlencoded({ extended: true }))
 const SignData = async (Json_data, privateKey) => {
     const Web3 = new web3();
     const signedData = await Web3.eth.accounts.sign(JSON.stringify(Json_data), privateKey)
-    // console.log(signedData)
     return signedData
 }
 
@@ -85,7 +81,7 @@ app.post('/event', async (req, res) => {
 
         //  console.log('===============')
          
-        const externalPlatformInfo = await fetch(HYPERFYRE_BASE_URL + url, {
+        const externalPlatformInfo = await fetch(base_url + url, {
             headers: {
                 "Content-Type": 'application/json'
             },
@@ -114,7 +110,7 @@ app.post('/user/event', async (req, res) => {
         
        /// console.log(signature)
        console.log(payload);
-        const externalPlatformInfo = await fetch(HYPERFYRE_BASE_URL + url, {
+        const externalPlatformInfo = await fetch(base_url + url, {
             headers: {
                 "Content-Type": 'application/json'
             },
@@ -149,7 +145,7 @@ app.post('/token', async (req, res) => {
         
         console.log(signature)
         console.log(payload)
-        const accessToken = await fetch(HYPERFYRE_BASE_URL + url, {
+        const accessToken = await fetch(base_url + url, {
             headers: {
                 "Content-Type": 'application/json'
             },
@@ -172,7 +168,7 @@ app.post('/participate', async(req, res)=> {
  try{
     const {slug, token}= req.body
     const url= `/form/${slug}?token=${token}`
-    const result= await fetch(HYPERFYRE_BASE_URL + url, {
+    const result= await fetch(base_url + url, {
         method:'GET'
     }).then(async response=>{
         const resp= await response.json()
