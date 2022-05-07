@@ -6,122 +6,145 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Myprofile</title>
 </head>
-
 <style>
-       #customers {
-       
-       text-align: center;
-       
-     font-family: Arial, Helvetica, sans-serif;
-     border-collapse: collapse;
-     width: 75vw;
-   }
-   
-   #customers td, #customers th {
-     border: 1px solid #ddd;
-     padding: 8px;
-   }
-   
-   #customers tr:nth-child(even){background-color: #f2f2f2;}
-   
-   #customers tr:hover {background-color: #ddd;}
-   
-   #customers th {
-     padding-top: 12px;
-     padding-bottom: 12px;
-     text-align: left;
-     background-color: #f3c44e;
-     color: rgb(0, 0, 0);
-   }
-</style>
+    #customers {
+        text-align: center;
+      
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 75vw;
+       }
 
-<body onload="fetchEventList()">
-    <h2>  My Profile</h2>
-    <div><p id="walletAdr"></p></div>
-    <table id="customers" ></table>
-
-    <script >
-        const url="http://localhost:3000/user/event"
-async function fetchEventList(){
-    let iat = Math.floor(Date.now() / 1000);
-    const exp= Math.floor((Date.now()+(3600*24*1000))/1000);
-    const isEmail= false;
-    await ethereum.request({method :'eth_requestAccounts'});
-    const externalUserId=window.ethereum.selectedAddress
-    document.getElementById('walletAdr').innerText =externalUserId
-
-    console.log(externalUserId);
-    const metaData={
-        limit:10,
-        page:1
-    };
-    const body={
-        data:{
-            iat,
-            exp,
-            isEmail,
-            externalUserId,
-            metaData:{
-                "page": 1,
-                "limit":10,
-            }
-        }
+    #customers td,
+    #customers th {
+        border: 1px solid #ddd;
+        padding: 8px;
     }
-    const eventList= await fetch(url,{
-        headers:{
-            "Content-Type": 'application/json'
-        },
-        method:"POST",
-        body:JSON.stringify(body)
 
-        }).then( async response=>{
-            const resp =  await response.json()
+    #customers tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    #customers tr:hover {
+        background-color: #ddd;
+    }
+
+    #customers th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: #f3c44e;
+        color: rgb(0, 0, 0);
+    }
+
+   button {
+    background-color: white;
+    color: black;
+    border: 2px solid #000000;
+    border-radius: 50px;
+    /* Green */
+  }
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        width: 200px;
+        background-color: #f1f1f1;
+    }
+
+    li a {
+        display: block;
+        color: #000;
+        padding: 8px 16px;
+        text-decoration: none;
+    }
+
+    li a:hover:not(.active) {
+        background-color: #555;
+        color: white;
+    }
+</style>      
+ <body onload="fetchEventList()">
+    <div id="navBar" class="sidenav" style="float: left;">
+        <ul>
+            <li><a href="/marketPlace">Market Place</a></li>
+            <li><a href="/profile">My Profile</a></li>
+        </ul>
+    </div>
+    <div style="float: right;">
+        <h2> My Profile</h2>
+        <div>
+            <p id="walletAdr"></p>
+        </div>
+        <table id="customers"></table>
+    </div>
+    <script>
+        const url = "http://localhost:3000/user/event"
+        async function fetchEventList() {
+            let iat = Math.floor(Date.now() / 1000);
+            const exp = Math.floor((Date.now() + (3600 * 24 * 1000)) / 1000);
+            const isEmail = false;
+            await ethereum.request({ method: 'eth_requestAccounts' });
+            const externalUserId = window.ethereum.selectedAddress
+            document.getElementById('walletAdr').innerText = externalUserId
+            console.log(externalUserId);
+            const metaData = {
+                limit: 10,
+                page: 1
+            };
+            const body = {
+                message: {
+                    iat,
+                    exp,
+                    isEmail,
+                    externalUserId,
+                    metaData: {
+                        "page": 1,
+                        "limit": 10,
+                    }
+                }
+            }
+            const eventList = await fetch(url, {
+                headers: {
+                    "Content-Type": 'application/json'
+                },
+                method: "POST",
+                body: JSON.stringify(body)
+
+            }).then(async response => {
+                const resp = await response.json()
                 console.log(resp)
                 show(resp.data)
-        })
-    }
-
-
-
-    async function show(data){
-   console.log(data);
-    let tab = 
-        `<tr>
+            })
+        }
+        async function show(data) {
+            console.log(data);
+            let tab =
+                `<tr>
           <th>Event Id</th>
           <th>Event Name</th>
           <th>Start Date</th>
           <th>End Date</th>
           <th> ProjectStatus</th>
-        
-         
-         </tr>`;
-    
-    // Loop to access all rows 
-    let i=0;
-  
-    for (let r of data.userEvent) {
 
-        tab += `<tr> 
+         </tr>`;
+
+            // Loop to access all rows 
+            let i = 0;
+
+            for (let r of data.userEvent) {
+
+                tab += `<tr> 
     <td>${r._id} </td>
     <td>${r.projectName}</td>
     <td>${r.fromDate}</td> 
     <td>${r.toDate}</td>   
-    <td>${r.projectStatus?'Open':'Closed'}</td> 
-    
-
-        
-    
+    <td>${r.projectStatus ? 'Open' : 'Closed'}</td> 
 
 </tr>`;
-
-document.getElementById("customers").innerHTML = tab;
-
-    }
-    // Setting innerHTML as tab variable
-   
- 
-} 
-
+  document.getElementById("customers").innerHTML = tab;
+            }
+        }
     </script>
 </body>
 </html>

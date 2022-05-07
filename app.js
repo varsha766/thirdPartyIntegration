@@ -3,12 +3,9 @@ import fetch from "node-fetch";
 import web3 from "web3";
 import express from "express";
 import mongoose from "mongoose";
-import bip39 from "bip39";
-import HDKey from "hdkey";
 import http from "http";
 import path from 'path';
-
-import UserModel from "./userDetail.js" //".userDetail"
+import UserModel from "./userDetail.js" 
 const __dirname = path.resolve();
 
 env.config();
@@ -16,7 +13,7 @@ const app = express();
 const server = http.createServer(app);
 const dbUrl = process.env.DB_URL
 const privateKey = process.env.PRIVATEKEY
-const HYPERFYRE_BASE_URL = 'http://localhost:6006'
+const base_url = process.env.HYPERFYRE_BASE_URL
 const appId = process.env.APP_ID
 const port = process.env.PORT
 mongoose.connect(dbUrl)
@@ -37,7 +34,6 @@ const SignData = async (Json_data, privateKey) => {
     const signedData = await Web3.eth.accounts.sign(JSON.stringify(Json_data), privateKey)
     return signedData
 }
-
 app.get("/", async (req, res) => {
     try {
         res.sendFile("./public/login.html", { root: __dirname });
@@ -74,13 +70,14 @@ app.post('/', async (req, res) => {
 app.post('/event', async (req, res) => {
     try {
         const url = '/api/v1/app/events'
-        req.body.data['appId'] = appId
-
+        req.body.message['appId'] = appId
         const payload = req.body
-        const signature = await SignData(payload.data, privateKey)
+
+        const signature = await SignData(payload.message, privateKey)
         payload['fyresign'] = signature.signature
-        payload['datahash'] = signature.messageHash         
-        const externalPlatformInfo = await fetch(HYPERFYRE_BASE_URL + url, {
+        payload['datahash'] = signature.messageHash
+        const externalPlatformInfo = await fetch(base_url + url, {
+       
             headers: {
                 "Content-Type": 'application/json'
             },
@@ -100,12 +97,14 @@ app.post('/event', async (req, res) => {
 app.post('/user/event', async (req, res) => {
     try {
         const url = '/api/v1/app/user/events'
-        req.body.data['appId'] = appId
+        req.body.message['appId'] = appId
         const payload = req.body
-        const signature = await SignData(payload.data, privateKey)
+        const signature = await SignData(payload.message, privateKey)
         payload['fyresign'] = signature.signature
         payload['datahash'] = signature.messageHash
-        const externalPlatformInfo = await fetch(HYPERFYRE_BASE_URL + url, {
+
+        console.log(payload);
+        const externalPlatformInfo = await fetch(base_url + url, {
             headers: {
                 "Content-Type": 'application/json'
             },
@@ -126,13 +125,16 @@ app.post('/user/event', async (req, res) => {
 
 app.post('/token', async (req, res) => {
     try {
-        const url = '/api/v1/app/user/redirection'    
-        req.body.data['appId'] = appId
-        const payload = req.body   
-        const signature = await SignData(payload.data, privateKey)
+
+        const url = '/api/v1/app/user/redirection'
+        req.body.message['appId'] = appId
+        const payload = req.body
+        const signature = await SignData(payload.message, privateKey)
         payload['fyresign'] = signature.signature
-        payload['datahash'] = signature.messageHash       
-        const accessToken = await fetch(HYPERFYRE_BASE_URL + url, {
+        payload['datahash'] = signature.messageHash
+        console.log(signature)
+        console.log(payload)
+        const accessToken = await fetch(base_url + url, {
             headers: {
                 "Content-Type": 'application/json'
             },
@@ -151,24 +153,6 @@ app.post('/token', async (req, res) => {
     }
 })
 
-app.post('/participate', async(req, res)=> {
- try{
-    const {slug, token}= req.body
-    const url= `/form/${slug}?token=${token}`
-    const result= await fetch(HYPERFYRE_BASE_URL + url, {
-        method:'GET'
-    }).then(async response=>{
-        const resp= await response.json()
-        console.log(resp)
-        res.send(resp)
-    })
-
-
-}catch(e){
-
-}
-
-})
 server.listen(port, () => {
-    console.log('server is running on  port', port);
+    console.log('server is running on  port http://localhost:' + port);
 })
