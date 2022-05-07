@@ -1,119 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Market Place</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Market Place</title>
 </head>
 <style>
-    #customers {
-       
-        text-align: center;
-        
-      font-family: Arial, Helvetica, sans-serif;
-      border-collapse: collapse;
-      width: 75vw;
-    }
-    
-    #customers td, #customers th {
-      border: 1px solid #ddd;
-      padding: 8px;
-    }
-    
-    #customers tr:nth-child(even){background-color: #f2f2f2;}
-    
-    #customers tr:hover {background-color: #ddd;}
-    
-    #customers th {
-      padding-top: 12px;
-      padding-bottom: 12px;
-      text-align: left;
-      background-color: #f3c44e;
-      color: rgb(0, 0, 0);
-    }
-    button{
-  background-color: white;
-  color: black;
-  border: 2px solid #000000;
-  border-radius: 50px; /* Green */
-}
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  width: 200px;
-  background-color: #f1f1f1;
-}
+  #customers {
 
-li a {
-  display: block;
-  color: #000;
-  padding: 8px 16px;
-  text-decoration: none;
-}
+    text-align: center;
 
-li a:hover:not(.active) {
-  background-color: #555;
-  color: white;
-} 
-    </style>
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 75vw;
+  }
+
+  #customers td,
+  #customers th {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+
+  #customers tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
+  #customers tr:hover {
+    background-color: #ddd;
+  }
+
+  #customers th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #f3c44e;
+    color: rgb(0, 0, 0);
+  }
+
+  button {
+    background-color: white;
+    color: black;
+    border: 2px solid #000000;
+    border-radius: 50px;
+    /* Green */
+  }
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 200px;
+    background-color: #f1f1f1;
+  }
+
+  li a {
+    display: block;
+    color: #000;
+    padding: 8px 16px;
+    text-decoration: none;
+  }
+
+  li a:hover:not(.active) {
+    background-color: #555;
+    color: white;
+}
+</style>
 <body onload="fetchEventList()">
 
-    <div id="navBar" class="sidenav" style="float: left;">
-    
-        <ul>
-            <li><a href="/marketPlace">Market Place</a></li>
-            <li><a href="/profile">My Profile</a></li>
-          </ul>
-            </div>
-    <a href="http://"></a>
-    <div style="float: right;">
+  <div id="navBar" class="sidenav" style="float: left;">
+
+    <ul>
+      <li><a href="/marketPlace">Market Place</a></li>
+      <li><a href="/profile">My Profile</a></li>
+    </ul>
+  </div>
+  <a href="http://"></a>
+  <div style="float: right;">
     <h2> Welcome to Event Page</h2>
-    <!-- <textarea id="response"> response</textarea> -->
-    <table id="customers" ></table>
-    <!--<div onload="fetchEventList()">Trending Events</div> -->
+    <table id="customers"></table>
 </div>
-    <script >
-        const url="http://localhost:3000/event"
-async function fetchEventList(){
-    let iat = Math.floor(Date.now() / 1000);
-    const exp= Math.floor((Date.now()+(3600*24*1000))/1000);
-    const metaData={
-        limit:10,
-        page:1
-    };
-    const body={
-        data:{
-            iat,
-            exp,
-            metaData
+  <script>
+    const url = "http://localhost:3000/event"
+    async function fetchEventList() {
+      let iat = Math.floor(Date.now() / 1000);
+      const exp = Math.floor((Date.now() + (3600 * 24 * 1000)) / 1000);
+      const metaData = {
+        limit: 10,
+        page: 1
+      };
+      const body = {
+        message: {
+          iat,
+          exp,
+          metaData
         }
-    }
-    const eventList= await fetch(url,{
-        headers:{
-            "Content-Type": 'application/json'
+      }
+      const eventList = await fetch(url, {
+        headers: {
+          "Content-Type": 'application/json'
         },
-        method:"POST",
-        body:JSON.stringify(body)
+        method: "POST",
+        body: JSON.stringify(body)
 
-        }).then(async response=>{
-            const resp= await response.json()
-            console.log(resp)
-            if(resp){
-               // document.getElementById("response").innerHTML=JSON.stringify(resp)
-                localStorage.clear()
-                localStorage.setItem('data',JSON.stringify(resp))
-              //  $("#response").html(resp)
-     
-              show(resp.data)
-            }
-        })
+      }).then(async response => {
+        const resp = await response.json()
+        console.log(resp)
+        if (resp) {
+          localStorage.clear()
+          localStorage.setItem('data', JSON.stringify(resp))
+          show(resp.data)
+        }
+      })
     }
 
-async function show(data){
-   console.log(data);
-    let tab = 
+    async function show(data) {
+      console.log(data);
+    let tab =
         `<tr>
           <th>Event Id</th>
           <th>Event Name</th>
@@ -123,97 +125,74 @@ async function show(data){
           <th> Participate</th>
          
          </tr>`;
-    
-    // Loop to access all rows 
-    let i=0;
-    for (let r of data.appEventList) {
+
+      // Loop to access all rows 
+    let i = 0;
+      for (let r of data.appEventList) {
 
         tab += `<tr> 
     <td>${r._id} </td>
     <td>${r.projectName}</td>
     <td>${r.fromDate}</td> 
     <td>${r.toDate}</td>   
-    <td>${r.projectStatus?'Open':'Closed'}</td> 
+    <td>${r.projectStatus ? 'Open' : 'Closed'}</td> 
 
     <td><button onclick="fetchToken()" id="fetch_${i++}">Participate</button> </td>         
     
 
 </tr>`;
 
-document.getElementById("customers").innerHTML = tab;
+        document.getElementById("customers").innerHTML = tab;
 
-    }
-    // Setting innerHTML as tab variable
-   
- 
-} 
+      }
+      // Setting innerHTML as tab variable
 
-async function fetchToken(){
-    // fetchToken(r._id,r.slug)
-    index=event.srcElement.id.split("_")[1]
-    let data=localStorage.getItem('data')
-    data=JSON.parse(data).data.appEventList
-    data=data
-    data=data[index]
-    eventId=data._id
-    slug= data.slug
-    const url="http://localhost:3000/token"
-    let iat = Math.floor(Date.now() / 1000);
-    const exp= Math.floor((Date.now()+(3600*24*1000))/1000);
-    const isEmail= false;
-    //const eventId= $(this).closest('tr').find('.table_id').text()//r._id
-  //  console.log(eventId ,   slug);
-    console.log("==================="+eventId)
-    externalUserId= await ethereum.selectedAddress; //"0x54ceff083c2c71b8e23b7a98bac91cf65883e880"
-    //externalUserId="pratapmridha@gmail.com"
-    console.log(externalUserId);
-    const body={
-        data:{
-            iat,
-            exp,
-            isEmail,
-            externalUserId,
-            eventId
+
+   }
+
+    async function fetchToken() {
+      index = event.srcElement.id.split("_")[1]
+      let data = localStorage.getItem('data')
+      data = JSON.parse(data).data.appEventList
+      data = data
+      data = data[index]
+      eventId = data._id
+      slug = data.slug
+      const url = "http://localhost:3000/token"
+      let iat = Math.floor(Date.now() / 1000);
+      const exp = Math.floor((Date.now() + (3600 * 24 * 1000)) / 1000);
+      const isEmail = false;
+      externalUserId = await ethereum.selectedAddress;
+
+      console.log(externalUserId);
+      const body = {
+        message: {
+          iat,
+          exp,
+          isEmail,
+          externalUserId,
+          eventId
         }
-    }
-    console.log(body);
-  
-    const token= await fetch(url,{
-        headers:{
-            "Content-Type": 'application/json'
+      }
+      console.log(body);
+
+      const token = await fetch(url, {
+        headers: {
+          "Content-Type": 'application/json'
         },
-       method:"POST",
-       body:JSON.stringify(body)
-    }).then(async response=>{
-        const resp= await response.json()
+        method: "POST",
+        body: JSON.stringify(body)
+      }).then(async response => {
+        const resp = await response.json()
         console.log(resp)
-        if(resp){
-           
-        const url= `https://hyperfyre-kyc.netlify.app/form/${slug}?token=${resp.data.userAccessToken}`
-        
-         window.open(url)
-          
-        //    const url="http://localhost:3000/participate"
-        //    const body= {
-        //        slug,
-        //        token:resp.data.userAccessToken
-        //    }
-        //     const data= await fetch(url,{
-        //         headers:{
-        //             "Content-Type": 'application/json'
+        if (resp) {
 
-        //         },
-        //         method:"POST",
-        //         body:JSON.stringify(body)
-        //     }).then(async response=>{
-        //         const res= await response.json()
-        //         console.log(res)
-        //     })
+          const url = `https://hyperfyre-kyc.netlify.app/form/${slug}?token=${resp.data.userAccessToken}`
+          //const url=`http://localhost:9002/form/${slug}?redirectionToken=${resp.data.userAccessToken}`
+          window.open(url)
         }
-    })
-}
-    </script>
+      })
+    }
+  </script>
 </body>
 </html>
-
-<!--       

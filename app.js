@@ -5,7 +5,7 @@ import express from "express";
 import mongoose from "mongoose";
 import http from "http";
 import path from 'path';
-import UserModel from "./userDetail.js" //".userDetail"
+import UserModel from "./userDetail.js" 
 const __dirname = path.resolve();
 
 env.config();
@@ -34,7 +34,6 @@ const SignData = async (Json_data, privateKey) => {
     const signedData = await Web3.eth.accounts.sign(JSON.stringify(Json_data), privateKey)
     return signedData
 }
-
 app.get("/", async (req, res) => {
     try {
         res.sendFile("./public/login.html", { root: __dirname });
@@ -71,16 +70,11 @@ app.post('/', async (req, res) => {
 app.post('/event', async (req, res) => {
     try {
         const url = '/api/v1/app/events'
-        req.body.data['appId'] = appId
-
+        req.body.message['appId'] = appId
         const payload = req.body
-        const signature = await SignData(payload.data, privateKey)
-       // console.log(payload);
+        const signature = await SignData(payload.message, privateKey)
         payload['fyresign'] = signature.signature
         payload['datahash'] = signature.messageHash
-
-        //  console.log('===============')
-         
         const externalPlatformInfo = await fetch(base_url + url, {
             headers: {
                 "Content-Type": 'application/json'
@@ -90,7 +84,6 @@ app.post('/event', async (req, res) => {
         })
             .then(async response => {
                 const resp = await response.json()
-                //console.log(resp)
                 res.send(resp)
             })
 
@@ -102,14 +95,12 @@ app.post('/event', async (req, res) => {
 app.post('/user/event', async (req, res) => {
     try {
         const url = '/api/v1/app/user/events'
-        req.body.data['appId'] = appId
+        req.body.message['appId'] = appId
         const payload = req.body
-        const signature = await SignData(payload.data, privateKey)
+        const signature = await SignData(payload.message, privateKey)
         payload['fyresign'] = signature.signature
         payload['datahash'] = signature.messageHash
-        
-       /// console.log(signature)
-       console.log(payload);
+        console.log(payload);
         const externalPlatformInfo = await fetch(base_url + url, {
             headers: {
                 "Content-Type": 'application/json'
@@ -133,16 +124,15 @@ app.post('/token', async (req, res) => {
     try {
         //eventId need to add
         const url = '/api/v1/app/user/redirection'
-        
-        req.body.data['appId'] = appId
-        
+        req.body.message['appId'] = appId
+
         const payload = req.body
-     //   payload.data['appId']=app
-    
-        const signature = await SignData(payload.data, privateKey)
+        //   payload.data['appId']=app
+
+        const signature = await SignData(payload.message, privateKey)
         payload['fyresign'] = signature.signature
         payload['datahash'] = signature.messageHash
-        
+
         console.log(signature)
         console.log(payload)
         const accessToken = await fetch(base_url + url, {
@@ -164,24 +154,6 @@ app.post('/token', async (req, res) => {
     }
 })
 
-app.post('/participate', async(req, res)=> {
- try{
-    const {slug, token}= req.body
-    const url= `/form/${slug}?token=${token}`
-    const result= await fetch(base_url + url, {
-        method:'GET'
-    }).then(async response=>{
-        const resp= await response.json()
-        console.log(resp)
-        res.send(resp)
-    })
-
-
-}catch(e){
-
-}
-
-})
 server.listen(port, () => {
-    console.log('server is running on  port http://localhost:'+port);
+    console.log('server is running on  port http://localhost:' + port);
 })
