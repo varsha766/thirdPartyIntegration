@@ -1,123 +1,144 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Market Place</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+
+    <title>Market Place</title>
 </head>
 <style>
-  #customers {
-
-    text-align: center;
-
-    font-family: Arial, Helvetica, sans-serif;
-    border-collapse: collapse;
-    width: 75vw;
-  }
-
-  #customers td,
-  #customers th {
-    border: 1px solid #ddd;
-    padding: 8px;
-  }
-
-  #customers tr:nth-child(even) {
-    background-color: #f2f2f2;
-  }
-
-  #customers tr:hover {
-    background-color: #ddd;
-  }
-
-  #customers th {
-    padding-top: 12px;
-    padding-bottom: 12px;
-    text-align: left;
-    background-color: #f3c44e;
-    color: rgb(0, 0, 0);
-  }
-
-  button {
-    background-color: white;
-    color: black;
-    border: 2px solid #000000;
-    border-radius: 50px;
-    /* Green */
-  }
-  ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    width: 200px;
-    background-color: #f1f1f1;
-  }
-
-  li a {
-    display: block;
-    color: #000;
-    padding: 8px 16px;
-    text-decoration: none;
-  }
-
-  li a:hover:not(.active) {
-    background-color: #555;
-    color: white;
-}
-</style>
-<body onload="fetchEventList()">
-
-  <div id="navBar" class="sidenav" style="float: left;">
-
-    <ul>
-      <li><a href="/marketPlace">Market Place</a></li>
-      <li><a href="/profile">My Profile</a></li>
-    </ul>
-  </div>
-  <a href="http://"></a>
-  <div style="float: right;">
-    <h2> Welcome to Event Page</h2>
-    <table id="customers"></table>
-</div>
-  <script>
-    const url = "http://localhost:3000/event"
-    async function fetchEventList() {
-      let iat = Math.floor(Date.now() / 1000);
-      const exp = Math.floor((Date.now() + (3600 * 24 * 1000)) / 1000);
-      const metaData = {
-        limit: 10,
-        page: 1
-      };
-      const body = {
-        message: {
-          iat,
-          exp,
-          metaData
-
-        }
-      }
-      const eventList = await fetch(url, {
-        headers: {
-          "Content-Type": 'application/json'
-        },
-        method: "POST",
-        body: JSON.stringify(body)
-
-      }).then(async response => {
-        const resp = await response.json()
-        console.log(resp)
-        if (resp) {
-          localStorage.clear()
-          localStorage.setItem('data', JSON.stringify(resp))
-          show(resp.data)
-        }
-      })
+    #customers {
+        text-align: center;
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 75vw;
     }
+    
+    #customers td,
+    #customers th {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+    
+    #customers tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+    
+    #customers tr:hover {
+        background-color: #ddd;
+    }
+    
+    #customers th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: #f3c44e;
+        color: rgb(0, 0, 0);
+    }
+    
+    button {
+        background-color: white;
+        color: black;
+        border: 2px solid #000000;
+        border-radius: 50px;
+        /* Green */
+    }
+    
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        width: 200px;
+        background-color: #f1f1f1;
+    }
+    
+    li a {
+        display: block;
+        color: #000;
+        padding: 8px 16px;
+        text-decoration: none;
+    }
+    
+    li a:hover:not(.active) {
+        background-color: #555;
+        color: white;
+    }
+    
+    .lightborder {
+        border-bottom: 1px solid #80808036;
+    }
+</style>
 
-    async function show(data) {
-      console.log(data);
-    let tab =
-        `<tr>
+<body onload="fetchEventList()">
+    <div class="row">
+        <div class="col-md-2 lightborder">
+
+        </div>
+        <div class="col-md-10 card lightborder" style="padding: 10px;">
+            <h2>Events Marketplace</h2>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 1%">
+        <div class="col-md-2">
+            <div id="navBar" class="sidenav">
+                <ul>
+                    <li><a href="/marketPlace">Market Place</a></li>
+                    <li><a href="/profile">My Profile</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-10 card">
+
+            <table id="customers" class="table"></table>
+
+        </div>
+    </div>
+    <script>
+        const url = "http://localhost:3000/event"
+        async function fetchEventList() {
+            let iat = Math.floor(Date.now() / 1000);
+            const exp = Math.floor((Date.now() + (3600 * 24 * 1000)) / 1000);
+            const metaData = {
+                limit: 10,
+                page: 1
+            };
+            const body = {
+                message: {
+                    iat,
+                    exp,
+                    metaData
+
+                }
+            }
+            const eventList = await fetch(url, {
+                headers: {
+                    "Content-Type": 'application/json'
+                },
+                method: "POST",
+                body: JSON.stringify(body)
+
+            }).then(async response => {
+                const resp = await response.json()
+                console.log(resp)
+                if (resp) {
+                    localStorage.clear()
+                    localStorage.setItem('data', JSON.stringify(resp))
+                    show(resp.data)
+                }
+            })
+        }
+
+        async function show(data) {
+            let tab =
+                `<tbody>
+                <thead>
+                <tr>
           <th>Event Id</th>
           <th>Event Name</th>
           <th>Start Date</th>
@@ -125,14 +146,14 @@
           <th> ProjectStatus</th>
           <th> Participate</th>
          
-         </tr>`;
+         </tr></thead>`;
 
-      // Loop to access all rows 
-    let i = 0;
-      for (let r of data) {
+            // Loop to access all rows 
+            let i = 0;
+            for (let r of data) {
 
 
-        tab += `<tr> 
+                tab += `<tr> 
     <td>${r._id} </td>
     <td>${r.projectName}</td>
     <td>${r.fromDate}</td> 
@@ -143,64 +164,68 @@
     
 
 </tr>`;
-
-        document.getElementById("customers").innerHTML = tab;
-
-
-      }
-      // Setting innerHTML as tab variable
+                tab += '</tbody>';
 
 
-   }
 
-    async function fetchToken() {
-      index = event.srcElement.id.split("_")[1]
-      let data = localStorage.getItem('data')
-      data = JSON.parse(data).data
-      data = data
-      data = data[index]
-      eventId = data._id
-      slug = data.slug
-      const url = "http://localhost:3000/token"
-      let iat = Math.floor(Date.now() / 1000);
-      const exp = Math.floor((Date.now() + (3600 * 24 * 1000)) / 1000);
-      const isEmail = false;
-      externalUserId = await ethereum.selectedAddress;
+                document.getElementById("customers").innerHTML = tab;
 
-      console.log(externalUserId);
-      const body = {
-        message: {
-          iat,
-          exp,
-          isEmail,
-          externalUserId,
-          eventId
 
-  
-}  
-        }
-      
-      console.log(body);
+            }
+            // Setting innerHTML as tab variable
 
-      const token = await fetch(url, {
-        headers: {
-          "Content-Type": 'application/json'
-        },
-        method: "POST",
-        body: JSON.stringify(body)
-      }).then(async response => {
-        const resp = await response.json()
-        console.log(resp)
-
-        if (resp) {
-          const url = `https://hyperfyre-kyc.netlify.app/form/${slug}?userRedirectionToken=${resp.data.userRedirectionToken}`
-
-          //const url=`http://localhost:9002/form/${slug}?redirectionToken=${resp.data.userRedirectionToken}`
-          window.open(url)
 
         }
-      })
-    }
-  </script>
+
+        async function fetchToken() {
+            index = event.srcElement.id.split("_")[1]
+            let data = localStorage.getItem('data')
+            data = JSON.parse(data).data
+            data = data
+            data = data[index]
+            eventId = data._id
+            slug = data.slug
+            const url = "http://localhost:3000/token"
+            let iat = Math.floor(Date.now() / 1000);
+            const exp = Math.floor((Date.now() + (3600 * 24 * 1000)) / 1000);
+            const isEmail = false;
+            externalUserId = await ethereum.selectedAddress;
+
+            console.log(externalUserId);
+            const body = {
+                message: {
+                    iat,
+                    exp,
+                    isEmail,
+                    externalUserId,
+                    eventId
+
+
+                }
+            }
+
+            console.log(body);
+
+            const token = await fetch(url, {
+                headers: {
+                    "Content-Type": 'application/json'
+                },
+                method: "POST",
+                body: JSON.stringify(body)
+            }).then(async response => {
+                const resp = await response.json()
+                console.log(resp)
+
+                if (resp) {
+                    const url = `https://hyperfyre-kyc.netlify.app/form/${slug}?userRedirectionToken=${resp.data.userRedirectionToken}`
+
+                    //const url=`http://localhost:9002/form/${slug}?redirectionToken=${resp.data.userRedirectionToken}`
+                    window.open(url)
+
+                }
+            })
+        }
+    </script>
 </body>
+
 </html>

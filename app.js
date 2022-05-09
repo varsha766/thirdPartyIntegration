@@ -5,7 +5,7 @@ import express from "express";
 import mongoose from "mongoose";
 import http from "http";
 import path from 'path';
-import UserModel from "./userDetail.js" 
+import UserModel from "./userDetail.js"
 const __dirname = path.resolve();
 
 env.config();
@@ -29,12 +29,12 @@ app.use(express.urlencoded({ extended: true }))
 
 //function to generate signature
 
-const SignData = async (Json_data, privateKey) => {
+const SignData = async(Json_data, privateKey) => {
     const Web3 = new web3();
     const signedData = await Web3.eth.accounts.sign(JSON.stringify(Json_data), privateKey)
     return signedData
 }
-app.get("/", async (req, res) => {
+app.get("/", async(req, res) => {
     try {
         res.sendFile("./public/login.html", { root: __dirname });
     } catch (e) {
@@ -50,7 +50,7 @@ app.get('/marketplace', (req, res) => {
 app.get('/profile', (req, res) => {
     res.sendFile("./public/profile.html", { root: __dirname })
 })
-app.post('/', async (req, res) => {
+app.post('/', async(req, res) => {
     try {
         let userDetail;
         userDetail = await UserModel.findOne({ publicKey: req.body })
@@ -67,7 +67,7 @@ app.post('/', async (req, res) => {
     }
 })
 
-app.post('/event', async (req, res) => {
+app.post('/event', async(req, res) => {
     try {
         const url = '/api/v1/app/events'
         req.body.message['appId'] = appId
@@ -76,14 +76,19 @@ app.post('/event', async (req, res) => {
         const signature = await SignData(payload.message, privateKey)
         payload['fyresign'] = signature.signature
         payload['messageHash'] = signature.messageHash
-        const externalPlatformInfo = await fetch(base_url + url, {
-       
-            headers: {
-                "Content-Type": 'application/json'
-            },
-            method: 'POST',
-            body: JSON.stringify(payload)
+
+        console.log({
+            base_url,
+            payload
         })
+        const externalPlatformInfo = await fetch(base_url + url, {
+
+                headers: {
+                    "Content-Type": 'application/json'
+                },
+                method: 'POST',
+                body: JSON.stringify(payload)
+            })
             .then(async response => {
                 const resp = await response.json()
                 res.send(resp)
@@ -94,7 +99,7 @@ app.post('/event', async (req, res) => {
         res.send(e)
     }
 })
-app.post('/user/event', async (req, res) => {
+app.post('/user/event', async(req, res) => {
     try {
         const url = '/api/v1/app/user/events'
         req.body.message['appId'] = appId
@@ -105,12 +110,12 @@ app.post('/user/event', async (req, res) => {
 
         console.log(payload);
         const externalPlatformInfo = await fetch(base_url + url, {
-            headers: {
-                "Content-Type": 'application/json'
-            },
-            method: 'POST',
-            body: JSON.stringify(payload)
-        })
+                headers: {
+                    "Content-Type": 'application/json'
+                },
+                method: 'POST',
+                body: JSON.stringify(payload)
+            })
             .then(async response => {
                 const resp = await response.json()
                 console.log(resp)
@@ -123,7 +128,7 @@ app.post('/user/event', async (req, res) => {
     }
 })
 
-app.post('/token', async (req, res) => {
+app.post('/token', async(req, res) => {
     try {
 
         const url = '/api/v1/app/user/redirection'
@@ -135,12 +140,12 @@ app.post('/token', async (req, res) => {
         console.log(signature)
         console.log(payload)
         const accessToken = await fetch(base_url + url, {
-            headers: {
-                "Content-Type": 'application/json'
-            },
-            method: 'POST',
-            body: JSON.stringify(payload)
-        })
+                headers: {
+                    "Content-Type": 'application/json'
+                },
+                method: 'POST',
+                body: JSON.stringify(payload)
+            })
             .then(async response => {
                 const resp = await response.json()
                 console.log(resp)
