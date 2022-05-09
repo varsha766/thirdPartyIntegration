@@ -126,6 +126,8 @@
           <th>Start Date</th>
           <th>End Date</th>
           <th> ProjectStatus</th>
+          <th>Actions Configured</th>
+          <th> Action Performed</th>
 
          </tr>`;
 
@@ -140,6 +142,8 @@
     <td>${r.fromDate}</td> 
     <td>${r.toDate}</td>   
     <td>${r.projectStatus ? 'Open' : 'Closed'}</td> 
+    <td>${r.eventActionsCount}</td> 
+    <td>${r.performedActionsCount}</td>   
 
 </tr>`;
   document.getElementById("customers").innerHTML = tab;
