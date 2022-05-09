@@ -129,7 +129,7 @@
 
       // Loop to access all rows 
     let i = 0;
-      for (let r of data.appEventList) {
+      for (let r of data) {
 
 
         tab += `<tr> 
@@ -156,7 +156,7 @@
     async function fetchToken() {
       index = event.srcElement.id.split("_")[1]
       let data = localStorage.getItem('data')
-      data = JSON.parse(data).data.appEventList
+      data = JSON.parse(data).data
       data = data
       data = data[index]
       eventId = data._id
@@ -193,7 +193,7 @@
         console.log(resp)
 
         if (resp) {
-          const url = `https://hyperfyre-kyc.netlify.app/form/${slug}?token=${resp.data.userAccessToken}`
+          const url = `https://hyperfyre-kyc.netlify.app/form/${slug}?redirectionToken=${resp.data.userAccessToken}`
           //const url=`http://localhost:9002/form/${slug}?redirectionToken=${resp.data.userAccessToken}`
           window.open(url)
 

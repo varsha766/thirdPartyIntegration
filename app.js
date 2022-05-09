@@ -75,7 +75,7 @@ app.post('/event', async (req, res) => {
 
         const signature = await SignData(payload.message, privateKey)
         payload['fyresign'] = signature.signature
-        payload['datahash'] = signature.messageHash
+        payload['messageHash'] = signature.messageHash
         const externalPlatformInfo = await fetch(base_url + url, {
        
             headers: {
@@ -101,7 +101,7 @@ app.post('/user/event', async (req, res) => {
         const payload = req.body
         const signature = await SignData(payload.message, privateKey)
         payload['fyresign'] = signature.signature
-        payload['datahash'] = signature.messageHash
+        payload['messageHash'] = signature.messageHash
 
         console.log(payload);
         const externalPlatformInfo = await fetch(base_url + url, {
@@ -131,7 +131,7 @@ app.post('/token', async (req, res) => {
         const payload = req.body
         const signature = await SignData(payload.message, privateKey)
         payload['fyresign'] = signature.signature
-        payload['datahash'] = signature.messageHash
+        payload['messageHash'] = signature.messageHash
         console.log(signature)
         console.log(payload)
         const accessToken = await fetch(base_url + url, {
