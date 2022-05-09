@@ -136,42 +136,39 @@
 
         async function show(data) {
             let tab =
-                `<tbody>
+                `
                 <thead>
                 <tr>
+                  <th>Banner</th>
           <th>Event Id</th>
           <th>Event Name</th>
           <th>Start Date</th>
           <th>End Date</th>
-          <th> ProjectStatus</th>
+          <th> Project Status</th>
           <th> Participate</th>
          
-         </tr></thead>`;
+         </tr></thead><tbody>`;
 
             // Loop to access all rows 
             let i = 0;
             for (let r of data) {
 
 
-                tab += `<tr> 
-    <td>${r._id} </td>
-    <td>${r.projectName}</td>
-    <td>${r.fromDate}</td> 
-    <td>${r.toDate}</td>   
-    <td>${r.projectStatus ? 'Open' : 'Closed'}</td> 
-
-    <td><button onclick="fetchToken()" id="fetch_${i++}">Participate</button> </td>         
-    
-
-</tr>`;
-                tab += '</tbody>';
-
-
-
-                document.getElementById("customers").innerHTML = tab;
-
-
+                tab += `
+                      <tr> 
+                        <td><img src='${r.logoUrl}'  width="40" height="40"/></td>
+                        <td>${r._id} </td>
+                        <td>${r.projectName}</td>
+                        <td>${r.fromDate}</td> 
+                        <td>${r.toDate}</td>   
+                        <td>${r.projectStatus ? 'Open' : 'Closed'}</td> 
+                        <td><button onclick="fetchToken()" id="fetch_${i++}">Participate</button> </td>         
+                      </tr>
+                      `;
             }
+
+            tab += '</tbody>';
+            document.getElementById("customers").innerHTML = tab;
             // Setting innerHTML as tab variable
 
 
