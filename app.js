@@ -69,7 +69,7 @@ app.post('/', async(req, res) => {
 
 app.post('/event', async(req, res) => {
     try {
-        const url = '/api/v1/app/events'
+        const path = '/api/v1/app/events'
         req.body.message['appId'] = appId
         const payload = req.body
 
@@ -79,20 +79,22 @@ app.post('/event', async(req, res) => {
 
         console.log({
             base_url,
+            path,
             payload
         })
-        const externalPlatformInfo = await fetch(base_url + url, {
+        const response = await fetch(base_url + path, {
 
-                headers: {
-                    "Content-Type": 'application/json'
-                },
-                method: 'POST',
-                body: JSON.stringify(payload)
-            })
-            .then(async response => {
-                const resp = await response.json()
-                res.send(resp)
-            })
+            headers: {
+                "Content-Type": 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify(payload)
+        })
+
+        console.log(response.status)
+        const json = await response.json()
+        console.log(json)
+        res.send(json)
 
     } catch (e) {
         console.log(`Error: ${e}`);
@@ -108,19 +110,22 @@ app.post('/user/event', async(req, res) => {
         payload['fyresign'] = signature.signature
         payload['messageHash'] = signature.messageHash
 
-        console.log(payload);
-        const externalPlatformInfo = await fetch(base_url + url, {
-                headers: {
-                    "Content-Type": 'application/json'
-                },
-                method: 'POST',
-                body: JSON.stringify(payload)
-            })
-            .then(async response => {
-                const resp = await response.json()
-                console.log(resp)
-                res.send(resp)
-            })
+        console.log({
+            payload,
+            base_url,
+            url
+        });
+        const resp = await fetch(base_url + url, {
+            headers: {
+                "Content-Type": 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify(payload)
+        })
+        console.log(resp)
+        const json = await resp.json()
+        console.log(json)
+        res.send(json);
 
     } catch (e) {
         console.log(`Error: ${e}`);
@@ -137,20 +142,19 @@ app.post('/token', async(req, res) => {
         const signature = await SignData(payload.message, privateKey)
         payload['fyresign'] = signature.signature
         payload['messageHash'] = signature.messageHash
-        console.log(signature)
-        console.log(payload)
-        const accessToken = await fetch(base_url + url, {
-                headers: {
-                    "Content-Type": 'application/json'
-                },
-                method: 'POST',
-                body: JSON.stringify(payload)
-            })
-            .then(async response => {
-                const resp = await response.json()
-                console.log(resp)
-                res.send(resp)
-            })
+
+        const response = await fetch(base_url + url, {
+            headers: {
+                "Content-Type": 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify(payload)
+        })
+        console.log(response.status)
+        const json = await response.json()
+        console.log(json)
+        res.send(json)
+
 
     } catch (e) {
         console.log(`Error: ${e}`);
