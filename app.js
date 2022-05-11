@@ -85,7 +85,8 @@ app.post('/event', async(req, res) => {
         const response = await fetch(base_url + path, {
 
             headers: {
-                "Content-Type": 'application/json'
+                "Content-Type": 'application/json',
+                "Origin":"http://localhost:3000"
             },
             method: 'POST',
             body: JSON.stringify(payload)
@@ -117,7 +118,8 @@ app.post('/user/event', async(req, res) => {
         });
         const resp = await fetch(base_url + url, {
             headers: {
-                "Content-Type": 'application/json'
+                "Content-Type": 'application/json',
+                "Origin":"http://localhost:3000/"
             },
             method: 'POST',
             body: JSON.stringify(payload)
@@ -145,7 +147,8 @@ app.post('/token', async(req, res) => {
 
         const response = await fetch(base_url + url, {
             headers: {
-                "Content-Type": 'application/json'
+                "Content-Type": 'application/json',
+                "Origin":"http://localhost:3000"
             },
             method: 'POST',
             body: JSON.stringify(payload)
