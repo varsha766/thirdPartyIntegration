@@ -214,9 +214,9 @@
                 console.log(resp)
 
                 if (resp) {
-                    const url = `https://hyperfyre-kyc.netlify.app/form/${slug}?userRedirectionToken=${resp.data.userRedirectionToken}`
+                    const url = `https://hyperfyre-stage.netlify.app/form/${slug}?userRedirectionToken=${resp.data.userRedirectionToken}`
 
-                    //const url=`http://localhost:9002/form/${slug}?redirectionToken=${resp.data.userRedirectionToken}`
+                   // const url=`http://localhost:9002/form/${slug}?userRedirectionToken=${resp.data.userRedirectionToken}`
                     window.open(url)
 
                 }
