@@ -69,7 +69,7 @@ app.post('/', async(req, res) => {
 
 app.post('/event', async(req, res) => {
     try {
-        const path = '/api/v1/app/events'
+        const path = '/ext/api/v1/app/events'
         req.body.message['appId'] = appId
         const payload = req.body
 
@@ -102,7 +102,7 @@ app.post('/event', async(req, res) => {
 })
 app.post('/user/event', async(req, res) => {
     try {
-        const url = '/api/v1/app/user/events'
+        const url = '/ext/api/v1/app/user/events'
         req.body.message['appId'] = appId
         const payload = req.body
         const signature = await SignData(payload.message, privateKey)
@@ -137,7 +137,7 @@ app.post('/user/event', async(req, res) => {
 app.post('/token', async(req, res) => {
     try {
 
-        const url = '/api/v1/app/user/redirection'
+        const url = '/ext/api/v1/app/user/redirection'
         req.body.message['appId'] = appId
         const payload = req.body
         const signature = await SignData(payload.message, privateKey)
