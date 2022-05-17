@@ -196,8 +196,6 @@
                     isEmail,
                     externalUserId,
                     eventId
-
-
                 }
             }
 
@@ -214,9 +212,10 @@
                 console.log(resp)
 
                 if (resp) {
-                    const url = `https://hyperfyre-stage.netlify.app/form/${slug}?userRedirectionToken=${resp.data.userRedirectionToken}`
+                    //const url = `https://hyperfyre-stage.netlify.app/form/${slug}?userRedirectionToken=${resp.data.userRedirectionToken}`
 
-                   // const url=`http://localhost:9002/form/${slug}?userRedirectionToken=${resp.data.userRedirectionToken}`
+                    const url=`http://localhost:9002/form/${slug}?userRedirectionToken=${resp.data.userRedirectionToken}`
+                  // const url=`https://app.fyre.hypersign.id/form/${slug}?userRedirectionToken=${resp.data.userRedirectionToken}`
                     window.open(url)
 
                 }

@@ -143,7 +143,7 @@ app.post('/token', async(req, res) => {
         const signature = await SignData(payload.message, privateKey)
         payload['fyresign'] = signature.signature
         payload['messageHash'] = signature.messageHash
-
+        console.log(payload)
         const response = await fetch(base_url + url, {
             headers: {
                 "Content-Type": 'application/json',
