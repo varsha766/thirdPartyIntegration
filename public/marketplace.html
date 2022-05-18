@@ -100,7 +100,7 @@
         </div>
     </div>
     <script>
-        const url = "http://localhost:3000/event"
+        const url = "https://localhost:3000/event"
         async function fetchEventList() {
             let iat = Math.floor(Date.now() / 1000);
             const exp = Math.floor((Date.now() + (3600 * 24 * 1000)) / 1000);
@@ -182,7 +182,7 @@
             data = data[index]
             eventId = data._id
             slug = data.slug
-            const url = "http://localhost:3000/token"
+            const url = "https://localhost:3000/token"
             let iat = Math.floor(Date.now() / 1000);
             const exp = Math.floor((Date.now() + (3600 * 24 * 1000)) / 1000);
             const isEmail = false;

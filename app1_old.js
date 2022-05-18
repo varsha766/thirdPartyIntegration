@@ -1,23 +1,16 @@
-import https from "https";
 import env from "dotenv"
 import fetch from "node-fetch";
 import web3 from "web3";
-import fs from "fs";
-//import { createServer } from "https";
 import express from "express";
 import mongoose from "mongoose";
+import http from "http";
 import path from 'path';
 import UserModel from "./userDetail.js"
 const __dirname = path.resolve();
 
 env.config();
-const key= fs.readFileSync('./cert/CA/localhost/localhost.decrypted.key');
-const cert= fs.readFileSync('./cert/CA/localhost/localhost.crt')
-
 const app = express();
-
-const server= https.createServer({key, cert}, app)
-
+const server = http.createServer(app);
 const dbUrl = process.env.DB_URL
 const privateKey = process.env.PRIVATEKEY
 const base_url = process.env.HYPERFYRE_BASE_URL
@@ -174,4 +167,3 @@ app.post('/token', async(req, res) => {
 server.listen(port, () => {
     console.log('server is running on  port http://localhost:' + port);
 })
-
